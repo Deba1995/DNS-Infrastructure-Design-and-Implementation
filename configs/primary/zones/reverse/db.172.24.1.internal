@@ -1,0 +1,13 @@
+$TTL 604800
+@   IN  SOA ns1.gentech.solution. admin.gentech.solution. (
+            2025081706
+            604800
+            86400
+            2419200
+            604800 )
+@    IN  NS ns2.gentech.solution.
+
+; PTR records (last octet reversed)
+214 IN PTR ns2.gentech.solution.
+130 IN PTR vault.gentech.solution.
+135 IN PTR hrsystem.gentech.solution.
