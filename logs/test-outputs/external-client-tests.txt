@@ -1,0 +1,28 @@
+# External Client DNS Tests (172.27.1.219)
+
+## Forward DNS for Internal Host (Should Be Blocked)
+$ dig @172.28.1.213 vault.gentech.solution
+
+; <<>> DiG 9.18.30-0ubuntu0.24.04.2-Ubuntu <<>> @172.28.1.213 vault.gentech.solution
+;; flags: qr aa rd; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 13715
+
+;; AUTHORITY SECTION:
+gentech.solution.       604800  IN      SOA     ns1.gentech.solution. admin.gentech.solution. 2025081706 604800 86400 2419200 604800
+
+## SOA Query (Should Work)
+$ dig @172.28.1.213 gentech.solution SOA
+
+; <<>> DiG 9.18.30-0ubuntu0.24.04.2-Ubuntu <<>> @172.28.1.213 gentech.solution SOA
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; ANSWER SECTION:
+gentech.solution.       604800  IN      SOA     ns1.gentech.solution. admin.gentech.solution. 2025081706 604800 86400 2419200 604800
+
+## Zone Transfer Attempt (Should Fail)
+$ dig @172.28.1.213 gentech.solution AXFR
+
+; <<>> DiG 9.18.30-0ubuntu0.24.04.2-Ubuntu <<>> @172.28.1.213 gentech.solution AXFR
+; Transfer failed.
+
+## Security Log Entry
+21-Aug-2025 16:31:15.874 security: error: client @0x7db2641d17c8 172.27.1.215#34177 (gentech.solution): view external: zone transfer 'gentech.solution/AXFR/IN' denied
