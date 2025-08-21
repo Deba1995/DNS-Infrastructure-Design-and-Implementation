@@ -1,0 +1,27 @@
+# Zone Transfer Security Tests
+
+## Authorized Transfer from dns2 (Should Succeed)
+$ dig @172.28.1.213 gentech.solution AXFR
+
+; <<>> DiG 9.18.1-1ubuntu1-Ubuntu <<>> @172.28.1.213 gentech.solution AXFR
+;; XFR size: 11 records (messages 1, bytes 345)
+
+gentech.solution.       604800  IN      SOA     ns1.gentech.solution. admin.gentech.solution. 2025081707 604800 86400 2419200 604800
+gentech.solution.       604800  IN      NS      ns1.gentech.solution.
+gentech.solution.       604800  IN      NS      ns2.gentech.solution.
+hrsystem.gentech.solution. 604800 IN    A       172.24.1.135
+intranet.gentech.solution. 604800 IN    A       172.28.1.120
+ns1.gentech.solution.   604800  IN      A       172.28.1.213
+ns2.gentech.solution.   604800  IN      A       172.24.1.214
+testhost.gentech.solution. 300  IN      A       172.28.1.199
+testhost.gentech.solution. 300  IN      TXT     "Dynamic DNS Test"
+vault.gentech.solution. 604800  IN      A       172.24.1.130
+gentech.solution.       604800  IN      SOA     ns1.gentech.solution. admin.gentech.solution. 2025081707 604800 86400 2419200 604800
+
+## Transfer Log Entries
+20-Aug-2025 10:06:43.889 xfer-out: info: client @0x7ea820036758 172.24.1.214#44397/key zone-xfer (gentech.solution): view internal: transfer of 'gentech.solution/IN': AXFR started: TSIG zone-xfer (serial 2025081707)
+20-Aug-2025 10:06:43.889 xfer-out: info: client @0x7ea820036758 172.24.1.214#44397/key zone-xfer (gentech.solution): view internal: transfer of 'gentech.solution/IN': AXFR ended: 1 messages, 11 records, 388 bytes, 0.001 secs (388000 bytes/sec) (serial 2025081707)
+
+## Incremental Zone Transfer (IXFR)
+21-Aug-2025 16:37:57.072 xfer-out: info: client @0x7db25c017b58 172.24.1.214#36009/key zone-xfer (gentech.solution): view internal: transfer of 'gentech.solution/IN': IXFR started: TSIG zone-xfer (serial 2025081707 -> 2025081708)
+21-Aug-2025 16:37:57.072 xfer-out: info: client @0x7db25c017b58 172.24.1.214#36009/key zone-xfer (gentech.solution): view internal: transfer of 'gentech.solution/IN': IXFR ended: 1 messages, 5 records, 291 bytes, 0.001 secs (291000 bytes/sec) (serial 2025081708)
