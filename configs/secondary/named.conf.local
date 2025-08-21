@@ -1,0 +1,50 @@
+include "/etc/bind/keys/zone-xfer.key";
+
+acl "internal-network" {
+    172.28.1.0/24;
+    172.24.1.0/24;
+    127.0.0.1;
+};
+
+view "internal" {
+     match-clients { internal-network; };
+     // Define zones
+     zone "gentech.solution" {
+        type secondary;
+        file "/var/cache/bind/db.gentech.solution.internal.slave";
+        primaries { 172.28.1.213 key "zone-xfer"; };
+        notify no;
+        allow-notify { 172.28.1.213; };
+     };
+
+     // Creating reverse zones
+     zone "1.28.172.in-addr.arpa" {
+        type secondary;
+        file "/var/cache/bind/db.172.28.1.internal.slave";
+        primaries { 172.28.1.213 key "zone-xfer"; };
+        notify no;
+        allow-notify { 172.28.1.213; };
+     };
+
+     zone "1.24.172.in-addr.arpa" {
+        type secondary;
+        file "/var/cache/bind/db.172.24.1.internal.slave";
+        primaries { 172.28.1.213 key "zone-xfer"; };
+        notify no;
+        allow-notify { 172.28.1.213; };
+     };
+
+};
+
+view "external" {
+     match-clients { any; };
+          // Define zones
+     zone "gentech.solution" {
+        type secondary;
+        file "/var/cache/bind/db.gentech.solution.external.slave";
+        primaries { 172.28.1.213 key "zone-xfer"; };
+        notify no;
+        allow-notify { 172.28.1.213; };
+     };
+
+};
