@@ -1,0 +1,33 @@
+# Dynamic DNS Update Tests
+
+## Successful DDNS Update with TSIG Key
+$ cat /tmp/ddns-test.txt
+server 172.28.1.213
+zone gentech.solution
+update add exam.gentech.solution 300 A 172.24.1.218
+send
+
+$ nsupdate -k /tmp/zone-xfer.key -v /tmp/ddns-test.txt
+[Success - no output]
+
+## Verification of Updated Record
+$ dig @172.28.1.213 exam.gentech.solution
+
+; <<>> DiG 9.18.1-1ubuntu1-Ubuntu <<>> @172.28.1.213 exam.gentech.solution
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; ANSWER SECTION:
+exam.gentech.solution.  300     IN      A       172.24.1.218
+
+## Failed DDNS Update Without Key
+$ nsupdate -v /tmp/ddns-test.txt
+update failed: REFUSED
+
+## DDNS Security Logs
+21-Aug-2025 16:37:57.058 update-security: info: client @0x7db2641d17c8 172.28.1.217#40689/key zone-xfer: view internal: signer "zone-xfer" approved
+21-Aug-2025 16:37:57.058 update: info: client @0x7db2641d17c8 172.28.1.217#40689/key zone-xfer: view internal: updating zone 'gentech.solution/IN': adding an RR at 'exam.gentech.solution' A 172.24.1.218
+21-Aug-2025 16:39:46.849 update-security: error: client @0x7db2641becf8 172.28.1.217#49383: view internal: update 'gentech.solution/IN' denied
+21-Aug-2025 16:40:00.502 update-security: error: client @0x7db2641d17c8 172.28.1.217#45465: view internal: update 'gentech.solution/IN' denied
+
+## Journal File Created
+$ ls -l /etc/bind/zones/*.jnl
+-rw-r--r-- 1 bind bind 1080 Aug 21 16:37 /etc/bind/zones/db.gentech.solution.internal.jnl
