@@ -1,0 +1,26 @@
+# Internal Client DNS Tests (172.28.1.217)
+
+## Forward DNS Resolution
+$ dig @172.28.1.213 vault.gentech.solution
+
+; <<>> DiG 9.18.30-0ubuntu0.22.04.2-Ubuntu <<>> @172.28.1.213 vault.gentech.solution
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; ANSWER SECTION:
+vault.gentech.solution. 604800  IN      A       172.24.1.130
+
+## Reverse DNS Resolution  
+$ dig @172.28.1.213 -x 172.24.1.130
+
+; <<>> DiG 9.18.30-0ubuntu0.22.04.2-Ubuntu <<>> @172.28.1.213 -x 172.24.1.130
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; ANSWER SECTION:
+130.1.24.172.in-addr.arpa. 604800 IN    PTR     vault.gentech.solution.
+
+## Zone Transfer Attempt (Should Fail)
+$ dig @172.28.1.213 gentech.solution AXFR
+
+; <<>> DiG 9.18.30-0ubuntu0.22.04.2-Ubuntu <<>> @172.28.1.213 gentech.solution AXFR
+; Transfer failed.
+
+## Security Log Entry
+21-Aug-2025 16:28:17.250 security: error: client @0x7db25c015328 172.28.1.217#41277 (gentech.solution): view internal: zone transfer 'gentech.solution/AXFR/IN' denied
