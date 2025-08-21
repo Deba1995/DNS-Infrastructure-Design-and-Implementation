@@ -1,0 +1,52 @@
+include "/etc/bind/keys/zone-xfer.key";
+
+acl "internal-network" {
+    172.28.1.0/24;
+    172.24.1.0/24;
+    127.0.0.1;
+};
+
+acl "secondaries" {
+    172.24.1.214;
+};
+
+view "internal" {
+     match-clients { internal-network; };
+     // Define zones
+     zone "gentech.solution" {
+        type primary;
+        file "/etc/bind/zones/db.gentech.solution.internal";
+        allow-transfer { key "zone-xfer"; secondaries; }; // Allow AXFR to dns2 with TSIG
+        also-notify { 172.24.1.214; };
+        allow-update { key "zone-xfer"; }; // Allow authenticated DNS updates
+     };
+
+     // Creating reverse zones
+     zone "1.28.172.in-addr.arpa" {
+        type primary;
+        file "/etc/bind/zones/db.172.28.1.internal";
+        allow-transfer { key "zone-xfer"; secondaries; }; // Allow AXFR to dns2 with TSIG
+        also-notify { 172.24.1.214; };
+     };
+
+     zone "1.24.172.in-addr.arpa" {
+        type primary;
+        file "/etc/bind/zones/db.172.24.1.internal";
+        allow-transfer { key "zone-xfer"; secondaries; }; // Allow AXFR to dns2 with TSIG
+        also-notify { 172.24.1.214; };
+     };
+
+};
+
+view "external" {
+     match-clients { any; };
+          // Define zones
+     zone "gentech.solution" {
+        type primary;
+        file "/etc/bind/zones/db.gentech.solution.external";
+        allow-transfer { none; };
+        notify no;
+        allow-update { none; };
+     };
+
+};
