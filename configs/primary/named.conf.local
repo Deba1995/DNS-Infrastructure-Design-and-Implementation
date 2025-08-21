@@ -27,6 +27,7 @@ view "internal" {
         file "/etc/bind/zones/db.172.28.1.internal";
         allow-transfer { key "zone-xfer"; secondaries; }; // Allow AXFR to dns2 with TSIG
         also-notify { 172.24.1.214; };
+        allow-update { key "zone-xfer"; }; // Allow authenticated DNS updates
      };
 
      zone "1.24.172.in-addr.arpa" {
@@ -34,6 +35,7 @@ view "internal" {
         file "/etc/bind/zones/db.172.24.1.internal";
         allow-transfer { key "zone-xfer"; secondaries; }; // Allow AXFR to dns2 with TSIG
         also-notify { 172.24.1.214; };
+        allow-update { key "zone-xfer"; }; // Allow authenticated DNS updates
      };
 
 };
@@ -44,9 +46,9 @@ view "external" {
      zone "gentech.solution" {
         type primary;
         file "/etc/bind/zones/db.gentech.solution.external";
-        allow-transfer { none; };
-        notify no;
-        allow-update { none; };
+        allow-transfer { key "zone-xfer"; secondaries; }; // Allow AXFR to dns2 with TSIG
+        also-notify { 172.24.1.214; };
+        allow-update { key "zone-xfer"; }; // Allow authenticated DNS updates
      };
 
 };
