@@ -1,1 +1,71 @@
-conf options
+// --- Logging definition ---
+
+logging {
+    // General logs (startup, shutdown, errors)
+    channel general_log {
+        file "/var/log/named/general.log" versions 3 size 5m;
+        severity info;
+        print-time yes;
+        print-severity yes;
+        print-category yes;
+    };
+
+    // Config parsing errors or warnings
+    channel config_log {
+        file "/var/log/named/config.log" versions 3 size 2m;
+        severity warning;
+        print-time yes;
+        print-severity yes;
+        print-category yes;
+    };
+
+    // Notifications (for master to notify slaves)
+    channel notify_log {
+        file "/var/log/named/notify.log" versions 3 size 5m;
+        severity info;
+        print-time yes;
+        print-severity yes;
+        print-category yes;
+    };
+
+    // Incoming zone transfers (slave)
+    channel transfer_log {
+        file "/var/log/named/transfer.log" versions 3 size 5m;
+        severity info;
+        print-time yes;
+        print-severity yes;
+        print-category yes;
+    };
+
+    // Assign channels to categories
+    category default        { general_log; };
+    category general        { general_log; };
+    category config         { config_log; };
+    category notify         { notify_log; };
+    category xfer-in        { transfer_log; };
+    category xfer-out       { transfer_log; };
+};
+
+// --- Options definition ---
+
+options {
+    directory "/var/cache/bind";
+    recursion no; // for authoritative server
+    listen-on { 127.0.0.1; 172.28.1.213; };
+    allow-query { any; };
+    allow-transfer { none; };  # Disable transfers by default
+    // Security settings
+    version "Not Disclosed";
+    hostname "Not Disclosed";
+    server-id "Not Disclosed";
+
+    auth-nxdomain no;
+    dnssec-validation auto;
+    listen-on-v6 { none; };  // disallow ipv6
+
+    // rate-limiting to prevent DNS amplification attacks,
+    rate-limit {
+    responses-per-second 10;
+    window 5;
+    };
+};
