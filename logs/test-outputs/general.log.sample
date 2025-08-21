@@ -1,0 +1,19 @@
+# Sample BIND9 General Log Entries
+
+# Zone Loading
+21-Aug-2025 16:24:04.037 zoneload: info: zone 1.24.172.in-addr.arpa/IN/internal: loaded serial 2025081706
+21-Aug-2025 16:24:04.038 zoneload: info: zone 1.28.172.in-addr.arpa/IN/internal: loaded serial 2025081706
+21-Aug-2025 16:24:04.039 zoneload: info: zone gentech.solution/IN/internal: loaded serial 2025081706
+21-Aug-2025 16:24:04.037 zoneload: info: zone gentech.solution/IN/external: loaded serial 2025081706
+
+# Security Events
+21-Aug-2025 16:28:17.250 security: error: client @0x7db25c015328 172.28.1.217#41277 (gentech.solution): view internal: zone transfer 'gentech.solution/AXFR/IN' denied
+21-Aug-2025 16:31:15.874 security: error: client @0x7db2641d17c8 172.27.1.215#34177 (gentech.solution): view external: zone transfer 'gentech.solution/AXFR/IN' denied
+
+# Dynamic DNS Updates  
+21-Aug-2025 16:37:57.058 update-security: info: client @0x7db2641d17c8 172.28.1.217#40689/key zone-xfer: view internal: signer "zone-xfer" approved
+21-Aug-2025 16:37:57.058 update: info: client @0x7db2641d17c8 172.28.1.217#40689/key zone-xfer: view internal: updating zone 'gentech.solution/IN': adding an RR at 'exam.gentech.solution' A 172.24.1.218
+
+# Rate Limiting
+21-Aug-2025 16:21:17.709 rate-limit: info: limit REFUSED error responses to 172.24.1.0/24  
+21-Aug-2025 16:23:50.707 rate-limit: info: limit REFUSED error responses to 172.27.1.0/24
