@@ -1,0 +1,17 @@
+$TTL 604800
+@   IN  SOA ns1.gentech.solution. admin.gentech.solution. (
+                   2025081706 ; Serial: YYYYMMDDnn (increment on every change)
+                   604800     ; Refresh
+                   86400      ; Retry
+                   2419200    ; Expire
+                   604800 )   ; Negative Cache TTL
+
+@    IN  NS    ns1.gentech.solution.
+@    IN  NS    ns2.gentech.solution.
+
+; Name server A records (glue)
+ns1 IN A 208.67.222.222
+ns2 IN A 8.8.8.8
+
+www IN A 8.8.4.4              ; Google DNS alt
+mail IN A 1.1.1.1             ; Cloudflare DNS
