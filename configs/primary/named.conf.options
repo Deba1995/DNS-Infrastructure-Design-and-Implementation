@@ -18,6 +18,23 @@ logging {
         print-severity yes;
         print-category yes;
     };
+    // Add security logging channel
+    channel security_log {
+        file "/var/log/named/security.log" versions 3 size 5m;
+        severity info;
+        print-time yes;
+        print-severity yes;
+        print-category yes;
+    };
+
+    // Add update logging for DDNS
+    channel update_log {
+        file "/var/log/named/update.log" versions 3 size 5m;
+        severity info;
+        print-time yes;
+        print-severity yes;
+        print-category yes;
+    };
 
     // Notifications (for master to notify slaves)
     channel notify_log {
@@ -44,6 +61,9 @@ logging {
     category notify         { notify_log; };
     category xfer-in        { transfer_log; };
     category xfer-out       { transfer_log; };
+    category security       { security_log; };
+    category update         { update_log; };
+    category update-security { security_log; };
 };
 
 // --- Options definition ---
