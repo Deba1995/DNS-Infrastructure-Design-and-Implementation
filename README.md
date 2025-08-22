@@ -60,15 +60,32 @@ I thoroughly tested every security feature:
 Full test outputs are available in the `logs/test-outputs/` directory.
 
 ## File Structure
-├── configs/
-│ ├── primary/ # Primary server configuration
-│ ├── secondary/ # Secondary server configuration
-│ └── keys/ # TSIG key templates
-├── logs/
-│ ├── test-outputs/ # Validation test results
-├── images/
-│ └── bind9_dns_architecture.png
+```
+├── configs
+│   ├── keys
+│   │   └── zone-xfer.key.example
+│   ├── primary
+│   │   ├── zones
+│   │   │   ├── forward
+│   │   │   │   ├── db.gentech.solution.external
+│   │   │   │   └── db.gentech.solution.internal
+│   │   │   └── reverse
+│   │   │       ├── db.172.24.1.internal
+│   │   │       └── db.172.28.1.internal
+│   │   ├── named.conf.local
+│   │   └── named.conf.options
+│   └── secondary
+│       ├── named.conf.local
+│       └── named.conf.options
+├── logs
+│   └── test-outputs
+│       ├── ddns-tests.txt
+│       ├── external-client-tests.txt
+│       ├── general.log.sample
+│       ├── internal-client-tests.txt
+│       └── zone-transfer-tests.txt
 └── README.md
+```
 
 
 ## Security Implementation
