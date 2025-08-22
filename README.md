@@ -1,6 +1,6 @@
 # DNS-Infrastructure-Design-and-Implementation
 
-# Enterprise DNS Infrastructure with BIND9
+# DNS Infrastructure with BIND9
 
 ## What I Built
 
