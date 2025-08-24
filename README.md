@@ -2,6 +2,8 @@
 
 # DNS Infrastructure with BIND9
 
+![BIND9 DNS Architecture](dns-setup.png)
+
 ## What I Built
 
 This project demonstrates a DNS infrastructure using BIND9 on Ubuntu. I set up primary and secondary DNS servers with security features including split-horizon DNS, TSIG-authenticated zone transfers, and dynamic DNS updates.
